@@ -3,7 +3,7 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20180918
+Version:        0.0.20180925
 Release:        1%{?dist}
 License:        GPLv2
 
@@ -58,5 +58,8 @@ done
 
 
 %changelog
+* Tue Sep 25 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20180925-1
+- Release 0.0.20180925
+
 * Sun Sep 23 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20180918-1
 - Initial package
