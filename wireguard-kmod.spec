@@ -3,7 +3,7 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20181119
+Version:        0.0.20181218
 Release:        1%{?dist}
 License:        GPLv2
 
@@ -44,7 +44,7 @@ done
 
 %build
 for kernel_version  in %{?kernel_versions} ; do
-  make V=1 %{?_smp_mflags} -C _kmod_build_${kernel_version%%___*} -C src M=${PWD}/_kmod_build_${kernel_version%%___*} module
+  make V=1 %{?_smp_mflags} -C ${kernel_version##*___} M=${PWD}/_kmod_build_${kernel_version%%___*}/src modules
 done
 
 
@@ -58,6 +58,10 @@ done
 
 
 %changelog
+* Tue Dec 18 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20181218-1
+- Release 0.0.20181218
+- Use make modules instead of make module
+
 * Mon Nov 19 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20181119-1
 - Release 0.0.20181119
 
