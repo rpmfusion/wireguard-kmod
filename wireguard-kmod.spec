@@ -4,7 +4,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20190227
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -18,11 +18,11 @@ BuildRequires:  elfutils-libelf-devel
 %{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
 
 %description
-WireGuard is a novel VPN that runs inside the Linux Kernel and utilizes 
-state-of-the-art cryptography. It aims to be faster, simpler, leaner, 
-and more useful than IPSec, while avoiding the massive headache. It intends 
-to be considerably more performant than OpenVPN. WireGuard is designed as a 
-general purpose VPN for running on embedded interfaces and super computers 
+WireGuard is a novel VPN that runs inside the Linux Kernel and utilizes
+state-of-the-art cryptography. It aims to be faster, simpler, leaner,
+and more useful than IPSec, while avoiding the massive headache. It intends
+to be considerably more performant than OpenVPN. WireGuard is designed as a
+general purpose VPN for running on embedded interfaces and super computers
 alike, fit for many different circumstances. It runs over UDP.
 
 This package contains the kmod module for WireGuard.
@@ -58,6 +58,9 @@ done
 
 
 %changelog
+* Thu Apr 04 19:27:39 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-3
+- Rebuilt for akmods-ostree-post scriptlet
+
 * Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190227-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
