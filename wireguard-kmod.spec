@@ -58,7 +58,7 @@ done
 
 
 %changelog
-* Sat Apr 06 13:32:03 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
+* Sat Apr 06 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
 - Release 0.0.20190406
 
 * Thu Feb 28 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-1
