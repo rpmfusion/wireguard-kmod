@@ -4,7 +4,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20190702
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -58,6 +58,9 @@ done
 
 
 %changelog
+* Fri Aug 09 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190702-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Fri Jul 05 19:32:04 CEST 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190702-1
 - Release 0.0.20190702
 
