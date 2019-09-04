@@ -1,10 +1,12 @@
+%if 0%{?fedora}
 %global buildforkernels akmod
 %global debug_package %{nil}
+%endif
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20190702
-Release:        1%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -58,14 +60,26 @@ done
 
 
 %changelog
-* Fri Jul 05 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190702-1
+* Wed Sep 04 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20190702-3
+- Rebuild for new el7 kernel and generate kmod package
+
+* Fri Aug 09 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190702-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Fri Jul 05 19:32:04 CEST 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190702-1
 - Release 0.0.20190702
 
-* Fri May 31 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190531-1
+* Fri May 31 20:14:05 CEST 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190531-1
 - Release 0.0.20190531
 
-* Sat Apr 06 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
+* Sat Apr 06 13:32:03 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
 - Release 0.0.20190406
+
+* Thu Apr 04 19:27:39 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-3
+- Rebuilt for akmods-ostree-post scriptlet
+
+* Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190227-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
 * Thu Feb 28 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-1
 - Release 0.0.20190227
@@ -88,6 +102,9 @@ done
 
 * Sun Oct 07 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20181007-1
 - Release 0.0.20181007
+
+* Sat Oct 06 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20181006-1
+- Release 0.0.20181006
 
 * Tue Sep 25 2018 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20180925-1
 - Release 0.0.20180925
