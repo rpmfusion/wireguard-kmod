@@ -61,16 +61,16 @@ done
 * Fri Aug 09 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190702-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
-* Fri Jul 05 19:32:04 CEST 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190702-1
+* Fri Jul 05 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190702-1
 - Release 0.0.20190702
 
-* Fri May 31 20:14:05 CEST 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190531-1
+* Fri May 31 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190531-1
 - Release 0.0.20190531
 
-* Sat Apr 06 13:32:03 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
+* Sat Apr 06 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190406-1
 - Release 0.0.20190406
 
-* Thu Apr 04 19:27:39 CET 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-3
+* Thu Apr 04 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-3
 - Rebuilt for akmods-ostree-post scriptlet
 
 * Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190227-2
