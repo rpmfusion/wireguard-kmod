@@ -1,10 +1,12 @@
+%if 0%{?fedora}
 %global buildforkernels akmod
 %global debug_package %{nil}
+%endif
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20190702
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -58,6 +60,9 @@ done
 
 
 %changelog
+* Wed Sep 04 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20190702-3
+- Rebuild for new el7 kernel and generate kmod package
+
 * Fri Aug 09 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190702-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
