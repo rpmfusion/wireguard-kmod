@@ -37,7 +37,7 @@ This package contains the kmod module for WireGuard.
 # print kmodtool output for debugging purposes:
 kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
-%autosetup -c -T -a 0
+%autosetup -c -T -a 0 -p 1
 
 for kernel_version  in %{?kernel_versions} ; do
   cp -a WireGuard-%{version} _kmod_build_${kernel_version%%___*}
@@ -80,6 +80,9 @@ done
 
 * Thu Apr 04 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-3
 - Rebuilt for akmods-ostree-post scriptlet
+
+* Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.0.20190227-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
 * Thu Feb 28 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20190227-1
 - Release 0.0.20190227
