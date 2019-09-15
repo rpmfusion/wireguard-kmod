@@ -5,8 +5,8 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20190702
-Release:        3%{?dist}
+Version:        0.0.20190913
+Release:        1%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -60,6 +60,9 @@ done
 
 
 %changelog
+* Sun Sep 15 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20190913-1
+- Release 0.0.20190913
+
 * Wed Sep 04 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20190702-3
 - Rebuild for new el7 kernel and generate kmod package
 
