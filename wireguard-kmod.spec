@@ -5,7 +5,7 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20191012
+Version:        0.0.20191127
 Release:        1%{?dist}
 License:        GPLv2
 
@@ -13,8 +13,7 @@ URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/WireGuard/snapshot/WireGuard-%{version}.tar.xz
 
 BuildRequires:  kmodtool
-BuildRequires:  elfutils-libelf-devel
-%{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
+%{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
 # kmodtool does its magic here
 %{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
@@ -60,6 +59,9 @@ done
 
 
 %changelog
+* Thu Dec 05 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20191127-1
+- Release 0.0.20191127
+
 * Sun Oct 13 2019 Robert-André Mauchin <zebob.m@gmail.com> - 0.0.20191012-1
 - Release 0.0.20191012
 
