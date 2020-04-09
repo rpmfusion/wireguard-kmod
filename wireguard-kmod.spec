@@ -6,11 +6,12 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20191219
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/WireGuard/snapshot/WireGuard-%{version}.tar.xz
+Patch0:         kernel-5.5.15.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -36,7 +37,7 @@ This package contains the kmod module for WireGuard.
 # print kmodtool output for debugging purposes:
 kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
-%autosetup -c -T -a 0 -p 1
+%autosetup -c -T -a 0 -p 0
 
 for kernel_version  in %{?kernel_versions} ; do
   cp -a WireGuard-%{version} _kmod_build_${kernel_version%%___*}
@@ -59,6 +60,9 @@ done
 
 
 %changelog
+* Thu Apr 09 2020 Leigh Scott <leigh123linux@gmail.com> - 0.0.20191219-2
+- Patch for kernel-5.5.15
+
 * Fri Dec 20 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20191219-1
 - Release 0.0.20191219
 
