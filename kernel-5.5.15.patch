@@ -1,0 +1,54 @@
+From 2d4fa2a6e7903ec3340f1b075456cbd84ba6a744 Mon Sep 17 00:00:00 2001
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Sat, 28 Mar 2020 19:49:30 -0600
+Subject: queueing: backport skb_reset_redirect change from 5.6
+
+This backports upstream commit 2c64605b590edadb3fb46d1ec6badb49e940b479.
+It makes no difference for us, but it's nice to keep this code in sync
+with upstream as much as possible.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ src/compat/compat.h | 10 ++++++++++
+ src/queueing.h      |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git WireGuard-0.0.20191219/src/compat/compat.h WireGuard-0.0.20191219/src/compat/compat.h
+index 42f7bee..fe2d07e 100644
+--- WireGuard-0.0.20191219/src/compat/compat.h
++++ WireGuard-0.0.20191219/src/compat/compat.h
+@@ -865,6 +865,16 @@
+ #define ipv6_dst_lookup_flow(a, b, c, d) ipv6_dst_lookup(a, b, &dst, c) + (void *)0 ?: dst
+ #endif
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 29) || (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 5, 0) && LINUX_VERSION_CODE < KERNEL_VERSION(5, 5, 14))
++#include <linux/skbuff.h>
++static inline void skb_reset_redirect(struct sk_buff *skb)
++{
++#ifdef CONFIG_NET_SCHED
++	skb_reset_tc(skb);
++#endif
++}
++#endif
++
+ #if defined(ISUBUNTU1604)
+ #include <linux/siphash.h>
+ #ifndef _WG_LINUX_SIPHASH_H
+
+diff --git WireGuard-0.0.20191219/src/queueing.h WireGuard-0.0.20191219/src/queueing.h
+index 256c6be..fe6e5c9 100644
+--- WireGuard-0.0.20191219/src/queueing.h
++++ WireGuard-0.0.20191219/src/queueing.h
+@@ -103,8 +103,8 @@ static inline void wg_reset_packet(struct sk_buff *skb)
+ 	skb->dev = NULL;
+ #ifdef CONFIG_NET_SCHED
+ 	skb->tc_index = 0;
+-	skb_reset_tc(skb);
+ #endif
++	skb_reset_redirect(skb);
+ 	skb->hdr_len = skb_headroom(skb);
+ 	skb_reset_mac_header(skb);
+ 	skb_reset_network_header(skb);
+-- 
+cgit v1.2.3-4-ga26e
+
