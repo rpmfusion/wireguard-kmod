@@ -6,7 +6,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        0.0.20191219
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -46,6 +46,12 @@ done
 
 %build
 for kernel_version  in %{?kernel_versions} ; do
+# We don't override kernel wireguard module (unless forced) until the packages are obsoleted by f32
+%if 0%{!?_with_kmod_wireguard_override:1}
+  if [[ ${kernel_version%%___*} -ge 5.6 ]] ; then
+    continue
+  fi
+%endif
   make V=1 %{?_smp_mflags} -C ${kernel_version##*___} M=${PWD}/_kmod_build_${kernel_version%%___*}/src modules
 done
 
@@ -53,6 +59,12 @@ done
 %install
 for kernel_version in %{?kernel_versions}; do
  mkdir -p %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/
+# We don't override kernel wireguard module (unless forced) until the packages are obsoleted by f32
+%if 0%{!?_with_kmod_wireguard_override:1}
+  if [[ ${kernel_version%%___*} -ge 5.6 ]] ; then
+    continue
+  fi
+%endif
  install -D -m 755 -t %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/ $(find _kmod_build_${kernel_version%%___*}/ -name '*.ko')
  chmod u+x %{buildroot}%{_prefix}/lib/modules/*/extra/*/*
 done
@@ -60,6 +72,9 @@ done
 
 
 %changelog
+* Tue Apr 14 2020 Nicolas Chauvet <kwizart@gmail.com> - 0.0.20191219-3
+- Disable wireguard until obsoleted
+
 * Thu Apr 09 2020 Leigh Scott <leigh123linux@gmail.com> - 0.0.20191219-2
 - Patch for kernel-5.5.15
 
