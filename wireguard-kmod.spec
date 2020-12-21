@@ -5,13 +5,12 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20191219
-Release:        3%{?dist}
+Version:        1.0.20201221
+Release:        1%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
-Source0:        https://git.zx2c4.com/WireGuard/snapshot/WireGuard-%{version}.tar.xz
-Patch0:         kernel-5.5.15.patch
+Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -40,7 +39,7 @@ kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildfo
 %autosetup -c -T -a 0 -p 0
 
 for kernel_version  in %{?kernel_versions} ; do
-  cp -a WireGuard-%{version} _kmod_build_${kernel_version%%___*}
+  cp -a wireguard-linux-compat-%{version} _kmod_build_${kernel_version%%___*}
 done
 
 
@@ -72,6 +71,9 @@ done
 
 
 %changelog
+* Mon Dec 21 2020 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20201221-1
+- Update to 1.0.20201221
+
 * Tue Apr 14 2020 Nicolas Chauvet <kwizart@gmail.com> - 0.0.20191219-3
 - Disable wireguard until obsoleted
 
