@@ -5,12 +5,12 @@
 
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
-Version:        0.0.20191219
+Version:        1.0.20201221
 Release:        1%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
-Source0:        https://git.zx2c4.com/WireGuard/snapshot/WireGuard-%{version}.tar.xz
+Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -36,15 +36,21 @@ This package contains the kmod module for WireGuard.
 # print kmodtool output for debugging purposes:
 kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
-%autosetup -c -T -a 0 -p 1
+%autosetup -c -T -a 0 -p 0
 
 for kernel_version  in %{?kernel_versions} ; do
-  cp -a WireGuard-%{version} _kmod_build_${kernel_version%%___*}
+  cp -a wireguard-linux-compat-%{version} _kmod_build_${kernel_version%%___*}
 done
 
 
 %build
 for kernel_version  in %{?kernel_versions} ; do
+# We don't override kernel wireguard module (unless forced) until the packages are obsoleted by f32
+%if 0%{!?_with_kmod_wireguard_override:1}
+  if [[ ${kernel_version%%___*} -ge 5.6 ]] ; then
+    continue
+  fi
+%endif
   make V=1 %{?_smp_mflags} -C ${kernel_version##*___} M=${PWD}/_kmod_build_${kernel_version%%___*}/src modules
 done
 
@@ -52,6 +58,12 @@ done
 %install
 for kernel_version in %{?kernel_versions}; do
  mkdir -p %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/
+# We don't override kernel wireguard module (unless forced) until the packages are obsoleted by f32
+%if 0%{!?_with_kmod_wireguard_override:1}
+  if [[ ${kernel_version%%___*} -ge 5.6 ]] ; then
+    continue
+  fi
+%endif
  install -D -m 755 -t %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/ $(find _kmod_build_${kernel_version%%___*}/ -name '*.ko')
  chmod u+x %{buildroot}%{_prefix}/lib/modules/*/extra/*/*
 done
@@ -59,6 +71,15 @@ done
 
 
 %changelog
+* Mon Dec 21 2020 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20201221-1
+- Update to 1.0.20201221
+
+* Tue Apr 14 2020 Nicolas Chauvet <kwizart@gmail.com> - 0.0.20191219-3
+- Disable wireguard until obsoleted
+
+* Thu Apr 09 2020 Leigh Scott <leigh123linux@gmail.com> - 0.0.20191219-2
+- Patch for kernel-5.5.15
+
 * Fri Dec 20 2019 Leigh Scott <leigh123linux@googlemail.com> - 0.0.20191219-1
 - Release 0.0.20191219
 
