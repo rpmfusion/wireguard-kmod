@@ -11,6 +11,7 @@ License:        GPLv2
 
 URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
+Patch0:         0001-compat-icmp_ndo_send-functions-were-backported-exten.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -36,7 +37,11 @@ This package contains the kmod module for WireGuard.
 # print kmodtool output for debugging purposes:
 kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
-%autosetup -c -T -a 0 -p 0
+%setup -q -c
+
+cd wireguard-linux-compat-%{version}
+%patch0 -p1
+cd -
 
 for kernel_version  in %{?kernel_versions} ; do
   cp -a wireguard-linux-compat-%{version} _kmod_build_${kernel_version%%___*}
