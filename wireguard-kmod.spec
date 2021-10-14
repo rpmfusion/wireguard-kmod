@@ -11,6 +11,9 @@ License:        GPLv2
 
 URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
+Patch0:         0001-compat-account-for-latest-c8s-backports.patch
+Patch1:         0002-compat-account-for-grsecurity-backports-and-changes.patch
+Patch2:         0003-crypto-curve25519-x86_64-solve-register-constraints-.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
