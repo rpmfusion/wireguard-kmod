@@ -40,11 +40,13 @@ This package contains the kmod module for WireGuard.
 kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
 %setup -q -c -T -a 0
+(cd wireguard-linux-compat-%{version}
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+)
 
 for kernel_version  in %{?kernel_versions} ; do
-  %patch0 -p1
-  %patch1 -p1
-  %patch2 -p1
   cp -a wireguard-linux-compat-%{version} _kmod_build_${kernel_version%%___*}
 done
 
