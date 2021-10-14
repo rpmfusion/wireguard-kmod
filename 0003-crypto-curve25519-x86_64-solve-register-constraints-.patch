@@ -1,0 +1,47 @@
+From 8118c247a75ae95169f0a9a539dfc661ffda8bc5 Mon Sep 17 00:00:00 2001
+From: Mathias Krause <minipli@grsecurity.net>
+Date: Tue, 6 Jul 2021 15:27:14 +0200
+Subject: [PATCH 3/3] crypto: curve25519-x86_64: solve register constraints
+ with reserved registers
+
+The register constraints for the inline assembly in fsqr() and fsqr2()
+are pretty tight on what the compiler may assign to the remaining three
+register variables. The clobber list only allows the following to be
+used: RDI, RSI, RBP and R12. With RAP reserving R12 and a kernel having
+CONFIG_FRAME_POINTER=y, claiming RBP, there are only two registers left
+so the compiler rightfully complains about impossible constraints.
+
+Provide alternatives that'll allow a memory reference for 'out' to solve
+the allocation constraint dilemma for this configuration.
+
+Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ src/crypto/zinc/curve25519/curve25519-x86_64.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/crypto/zinc/curve25519/curve25519-x86_64.c b/src/crypto/zinc/curve25519/curve25519-x86_64.c
+index 79716c425b0c..67f55affcf88 100644
+--- a/src/crypto/zinc/curve25519/curve25519-x86_64.c
++++ b/src/crypto/zinc/curve25519/curve25519-x86_64.c
+@@ -581,7 +581,7 @@ static inline void fsqr(u64 *out, const u64 *f, u64 *tmp)
+ 		"  cmovc %%rdx, %%rax;"
+ 		"  add %%rax, %%r8;"
+ 		"  movq %%r8, 0(%0);"
+-	: "+&r" (tmp), "+&r" (f), "+&r" (out)
++	: "+&r,&r" (tmp), "+&r,&r" (f), "+&r,m" (out)
+ 	:
+ 	: "%rax", "%rcx", "%rdx", "%r8", "%r9", "%r10", "%r11", "%rbx", "%r13", "%r14", "%r15", "memory", "cc"
+ 	);
+@@ -743,7 +743,7 @@ static inline void fsqr2(u64 *out, const u64 *f, u64 *tmp)
+ 		"  cmovc %%rdx, %%rax;"
+ 		"  add %%rax, %%r8;"
+ 		"  movq %%r8, 32(%0);"
+-	: "+&r" (tmp), "+&r" (f), "+&r" (out)
++	: "+&r,&r" (tmp), "+&r,&r" (f), "+&r,m" (out)
+ 	:
+ 	: "%rax", "%rcx", "%rdx", "%r8", "%r9", "%r10", "%r11", "%rbx", "%r13", "%r14", "%r15", "memory", "cc"
+ 	);
+-- 
+2.31.1
+

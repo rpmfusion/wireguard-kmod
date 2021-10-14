@@ -1,0 +1,84 @@
+From 29747255f9672035ccf9cc310b7ff66b1f35f1d2 Mon Sep 17 00:00:00 2001
+From: Mathias Krause <minipli@grsecurity.net>
+Date: Tue, 6 Jul 2021 15:27:13 +0200
+Subject: [PATCH 2/3] compat: account for grsecurity backports and changes
+
+grsecurity kernels tend to carry additional backports and changes, like
+commit b60b87fc2996 ("netlink: add ethernet address policy types") or
+the SYM_FUNC_* changes. RAP nowadays hooks the latter, therefore no
+diversion to RAP_ENTRY is needed any more.
+
+Instead of relying on the kernel version test, also test for the macros
+we're about to define to not already be defined to account for these
+additional changes in the grsecurity patch without breaking
+compatibility to the older public ones.
+
+Also test for CONFIG_PAX instead of RAP_PLUGIN for the timer API related
+changes as these don't depend on the RAP plugin to be enabled but just a
+PaX/grsecurity patch to be applied. While there is no preprocessor knob
+for the latter, use CONFIG_PAX as this will likely be enabled in every
+kernel that uses the patch.
+
+Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+[zx2c4: small changes to include a header nearby a macro def test]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ src/compat/compat-asm.h | 4 ++--
+ src/compat/compat.h     | 8 +++++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/src/compat/compat-asm.h b/src/compat/compat-asm.h
+index fde21dabba4f..5bfdb9410933 100644
+--- a/src/compat/compat-asm.h
++++ b/src/compat/compat-asm.h
+@@ -22,7 +22,7 @@
+ #endif
+ 
+ /* PaX compatibility */
+-#if defined(RAP_PLUGIN)
++#if defined(RAP_PLUGIN) && defined(RAP_ENTRY)
+ #undef ENTRY
+ #define ENTRY RAP_ENTRY
+ #endif
+@@ -51,7 +51,7 @@
+ #undef pull
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 76) && !defined(ISCENTOS8S)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 76) && !defined(ISCENTOS8S) && !defined(SYM_FUNC_START)
+ #define SYM_FUNC_START ENTRY
+ #define SYM_FUNC_END ENDPROC
+ #endif
+diff --git a/src/compat/compat.h b/src/compat/compat.h
+index b2041327d85c..ee45a3cc7457 100644
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
+@@ -831,10 +831,16 @@ static inline void skb_mark_not_on_list(struct sk_buff *skb)
+ #endif
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 20, 0) && !defined(ISRHEL8)
++#include <net/netlink.h>
++#ifndef NLA_POLICY_EXACT_LEN
+ #define NLA_POLICY_EXACT_LEN(_len) { .type = NLA_UNSPEC, .len = _len }
+ #endif
++#endif
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 2, 0) && !defined(ISRHEL8)
++#include <net/netlink.h>
++#ifndef NLA_POLICY_MIN_LEN
+ #define NLA_POLICY_MIN_LEN(_len) { .type = NLA_UNSPEC, .len = _len }
++#endif
+ #define COMPAT_CANNOT_INDIVIDUAL_NETLINK_OPS_POLICY
+ #endif
+ 
+@@ -1127,7 +1133,7 @@ static const struct header_ops ip_tunnel_header_ops = { .parse_protocol = ip_tun
+ #undef __read_mostly
+ #define __read_mostly
+ #endif
+-#if (defined(RAP_PLUGIN) || defined(CONFIG_CFI_CLANG)) && LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
++#if (defined(CONFIG_PAX) || defined(CONFIG_CFI_CLANG)) && LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+ #include <linux/timer.h>
+ #define wg_expired_retransmit_handshake(a) wg_expired_retransmit_handshake(unsigned long timer)
+ #define wg_expired_send_keepalive(a) wg_expired_send_keepalive(unsigned long timer)
+-- 
+2.31.1
+
