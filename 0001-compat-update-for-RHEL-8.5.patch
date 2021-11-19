@@ -1,0 +1,62 @@
+From 77256108c0edcaee78dc16352e7339fb13ddeb05 Mon Sep 17 00:00:00 2001
+From: Peter Georg <peter.georg@physik.uni-regensburg.de>
+Date: Tue, 16 Nov 2021 17:52:22 +0100
+Subject: [PATCH] compat: update for RHEL 8.5
+
+RHEL 8.5 has been released. Replace all ISCENTOS8S checks with ISRHEL8.
+Increase RHEL_MINOR for CentOS 8 Stream detection to 6.
+
+Signed-off-by: Peter Georg <peter.georg@physik.uni-regensburg.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ src/compat/compat-asm.h | 4 ++--
+ src/compat/compat.h     | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/compat/compat-asm.h b/src/compat/compat-asm.h
+index 5bfdb9410933..951fc1094470 100644
+--- a/src/compat/compat-asm.h
++++ b/src/compat/compat-asm.h
+@@ -15,7 +15,7 @@
+ #define ISRHEL7
+ #elif RHEL_MAJOR == 8
+ #define ISRHEL8
+-#if RHEL_MINOR >= 4
++#if RHEL_MINOR >= 6
+ #define ISCENTOS8S
+ #endif
+ #endif
+@@ -51,7 +51,7 @@
+ #undef pull
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 76) && !defined(ISCENTOS8S) && !defined(SYM_FUNC_START)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 76) && !defined(ISRHEL8) && !defined(SYM_FUNC_START)
+ #define SYM_FUNC_START ENTRY
+ #define SYM_FUNC_END ENDPROC
+ #endif
+diff --git a/src/compat/compat.h b/src/compat/compat.h
+index ee45a3cc7457..9aa767a277fe 100644
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
+@@ -16,7 +16,7 @@
+ #define ISRHEL7
+ #elif RHEL_MAJOR == 8
+ #define ISRHEL8
+-#if RHEL_MINOR >= 5
++#if RHEL_MINOR >= 6
+ #define ISCENTOS8S
+ #endif
+ #endif
+@@ -855,7 +855,7 @@ static inline void skb_mark_not_on_list(struct sk_buff *skb)
+ #endif
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 5, 0) && !defined(ISCENTOS8S)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 5, 0) && !defined(ISRHEL8)
+ #define genl_dumpit_info(cb) ({ \
+ 	struct { struct nlattr **attrs; } *a = (void *)((u8 *)cb->args + offsetofend(struct dump_ctx, next_allowedip)); \
+ 	BUILD_BUG_ON(sizeof(cb->args) < offsetofend(struct dump_ctx, next_allowedip) + sizeof(*a)); \
+-- 
+2.33.1
+
