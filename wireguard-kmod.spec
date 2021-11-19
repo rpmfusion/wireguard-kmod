@@ -6,7 +6,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        1.0.20210606
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -14,6 +14,7 @@ Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-
 Patch0:         0001-compat-account-for-latest-c8s-backports.patch
 Patch1:         0002-compat-account-for-grsecurity-backports-and-changes.patch
 Patch2:         0003-crypto-curve25519-x86_64-solve-register-constraints-.patch
+Patch3:         0001-compat-update-for-RHEL-8.5.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -44,6 +45,7 @@ kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildfo
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 )
 
 for kernel_version  in %{?kernel_versions} ; do
@@ -79,6 +81,9 @@ done
 
 
 %changelog
+* Fri Nov 19 2021 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20210606-3
+- Update for EL8.5
+
 * Thu Oct 14 2021 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20210606-2
 - Backport patches
 
