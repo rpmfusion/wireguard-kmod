@@ -1,0 +1,41 @@
+From 99935b07b48a2ff696d64996277d89efe8242d37 Mon Sep 17 00:00:00 2001
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Tue, 28 Jun 2022 12:43:06 +0200
+Subject: [PATCH] compat: do not backport ktime_get_coarse_boottime_ns to c8s
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Also bump the c8s version stamp.
+
+Reported-by: Vladimír Beneš <vbenes@redhat.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ src/compat/compat.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/compat/compat.h b/src/compat/compat.h
+index d166ac235a99..aebeabf10741 100644
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
+@@ -16,7 +16,7 @@
+ #define ISRHEL7
+ #elif RHEL_MAJOR == 8
+ #define ISRHEL8
+-#if RHEL_MINOR >= 6
++#if RHEL_MINOR >= 7
+ #define ISCENTOS8S
+ #endif
+ #endif
+@@ -390,7 +390,7 @@ static inline int get_random_bytes_wait(void *buf, int nbytes)
+ #define system_power_efficient_wq system_unbound_wq
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0) && !defined(ISCENTOS8S)
+ #include <linux/ktime.h>
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 17, 0)
+ #include <linux/hrtimer.h>
+-- 
+2.38.1
+
