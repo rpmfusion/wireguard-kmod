@@ -11,10 +11,8 @@ License:        GPLv2
 
 URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
-Patch0:         0001-compat-account-for-latest-c8s-backports.patch
-Patch1:         0002-compat-account-for-grsecurity-backports-and-changes.patch
-Patch2:         0003-crypto-curve25519-x86_64-solve-register-constraints-.patch
-Patch3:         0001-compat-update-for-RHEL-8.5.patch
+# backport from https://git.zx2c4.com/wireguard-linux-compat/commit/?id=99935b07b48a2ff696d64996277d89efe8242d37
+Patch0:         compat-do-not-backport-ktime_get_coarse_boottime_ns-.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -43,9 +41,6 @@ kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildfo
 %setup -q -c -T -a 0
 (cd wireguard-linux-compat-%{version}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
 )
 
 for kernel_version  in %{?kernel_versions} ; do
