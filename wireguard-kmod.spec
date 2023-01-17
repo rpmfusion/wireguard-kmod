@@ -6,13 +6,14 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        1.0.20220627
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
 Source0:        https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-%{version}.tar.xz
 # backport from https://git.zx2c4.com/wireguard-linux-compat/commit/?id=99935b07b48a2ff696d64996277d89efe8242d37
 Patch0:         compat-do-not-backport-ktime_get_coarse_boottime_ns-.patch
+Patch1:         https://raw.githubusercontent.com/elrepo/packages/master/wireguard-kmod/el8/elrepo-wireguard-backports.el8_7.patch
 
 BuildRequires:  kmodtool
 %{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -41,6 +42,7 @@ kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildfo
 %setup -q -c -T -a 0
 (cd wireguard-linux-compat-%{version}
 %patch0 -p1
+%patch1 -p1
 )
 
 for kernel_version  in %{?kernel_versions} ; do
@@ -76,6 +78,9 @@ done
 
 
 %changelog
+* Tue Jan 17 2023 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-2
+- Apply patch for RHEL8.7 - rfbz#6559
+
 * Wed Nov 16 2022 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-1
 - Update to 1.0.20220627
 
