@@ -6,7 +6,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        1.0.20220627
-Release:        3%{?dist}
+Release:        2%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -41,7 +41,7 @@ kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildfo
 
 %setup -q -c -T -a 0
 (cd wireguard-linux-compat-%{version}
-#patch0 -p1
+%patch0 -p1
 %patch1 -p1
 )
 
@@ -78,9 +78,8 @@ done
 
 
 %changelog
-* Tue Jan 17 2023 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-3
+* Tue Jan 17 2023 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-2
 - Apply patch for RHEL8.7 - rfbz#6559
-- Disable upstream patch
 
 * Wed Nov 16 2022 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-1
 - Update to 1.0.20220627
