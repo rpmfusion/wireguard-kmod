@@ -6,7 +6,7 @@
 Name:           wireguard-kmod
 Summary:        Kernel module (kmod) for Wireguard
 Version:        1.0.20220627
-Release:        4%{?dist}
+Release:        5%{?dist}
 License:        GPLv2
 
 URL:            https://www.wireguard.com/
@@ -78,6 +78,9 @@ done
 
 
 %changelog
+* Fri Nov 24 2023 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-5
+- rebuilt
+
 * Thu Jan 26 2023 Nicolas Chauvet <kwizart@gmail.com> - 1.0.20220627-4
 - rebuilt
 
